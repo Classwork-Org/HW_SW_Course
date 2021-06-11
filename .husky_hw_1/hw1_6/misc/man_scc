@@ -1,0 +1,300 @@
+scc(l)                                                                                                                         scc(l)
+
+
+
+NAME
+       scc - SpecC Compiler
+
+SYNOPSIS
+       scc -h
+
+       scc design [ command ] [ options ]
+
+DESCRIPTION
+       scc  is  the compiler for the SpecC language.  The main purpose of scc is to compile a SpecC source program into an executable
+       program for simulation. Furthermore, scc serves as a general tool to translate SpecC code from various input to various output
+       formats which include SpecC source text, SpecC binary files in SpecC Internal Representation format, and other compiler inter‐
+       mediate files.
+
+       Using the first command syntax as shown in the synopsis above, a brief usage information and the compiler version are  printed
+       to  standard output and the program exits.  Using the second command syntax, the specified design is compiled. By default, scc
+       reads a SpecC source file, performs preprocessing and builds the SpecC Internal Representation (SIR). Then, C++ code is gener‐
+       ated,  compiled and linked into an executable file to be used for simulation.  However, the subtasks performed by scc are con‐
+       trolled by the given command so that, for example, only partial compilation is performed with the specified design.
+
+       On successful completion, the exit value 0 is returned.  In case of errors during processing, an error code with a brief diag‐
+       nostic message is written to standard error and the program execution is aborted with the exit value 10.
+
+       For  preprocessing and C++ compilation, scc relies on the availability of an external C++ compiler which is used automatically
+       in the background. By default, the GNU compiler gcc/g++ is used.
+
+ARGUMENTS
+       design specifies the name of the design; by default, this name is used as base name for the input file and all output files;
+
+COMMAND
+       The command has the format - suffix1 2 suffix2, where suffix1 and suffix2 specify the format of  the  main  input  and  output
+       file, respectively.  This command also implies the compilation steps being performed.  By default, the command -sc2out is used
+       which specifies reading a SpecC source file (e.g. design.sc) and generating an executable file (e.g.  a.out)  for  simulation.
+       All necessary intermediate files (e.g.  design.cc, design.o) are generated automatically.
+
+       Legal command suffixes are:
+
+       sc     SpecC source file (default: design.sc)
+
+       si     preprocessed SpecC source file (default: design.si)
+
+       sir    binary SIR file in SpecC Internal Representation format (default: design.sir)
+
+       cc     C++ simulation source file (default: design.cc)
+
+       h      C++ simulation header file (default: design.h)
+
+       cch    both, C++ simulation source file and C++ header file (default: design.cc and design.h)
+
+       o      linker object file (default: design.o)
+
+       out    executable  file  for  simulation  (default:  design);  however, with the -ip option, a shared library will be produced
+              (default: libdesign.so)
+
+OPTIONS
+       -v | -vv | -vvv
+              increase the verbosity level so that all tasks performed are logged to standard error (default: be silent); at level 1,
+              informative  messages  for  each task performed are displayed; at level 2, additionally input and output file names are
+              listed; at level 3, very detailed information about each executed task is printed;
+
+       -w | -ww | -www
+              increase the warning level so that warning messages are enabled (default: warnings are disabled); four levels are  sup‐
+              ported  ranging  from only important warnings (level 1) to pedantic warnings (level 4); for most cases, warning level 2
+              is recommended (-ww);
+
+       -g     add a symbol table suitable for debugging (e.g. gdb) to the generated simulation executable (default: no debugging sym‐
+              bols); this option disables optimization (-O);
+
+       -O     optimize the generated simulation executable for increased execution speed and less memory usage (default: no optimiza‐
+              tion); this option disables generation of debugging symbols (-g);
+
+       -G     enable debugging facilities available at run-time (default: no run-time  debugging  support);  this  option  implicitly
+              defines  the  preprocessor macro DEBUG at the preprocessing stage which enables the debugging functions declared in the
+              sim/debug.sh header file; this option also instructs the code generator to instrument  the  generated  simulation  exe‐
+              cutable with additional information required by the run-time debugging facilities; note that this option is independent
+              from the generation of any debugging symbols (option -g);
+
+       -Tvcd | -Tvcds | -Tsvc
+              enable tracing facilities available at run-time (default: no run-time tracing support); these options implicitly define
+              the  preprocessor  macro  TRACE  at  the  preprocessing  stage  which  enables  the  tracing  functions declared in the
+              sim/trace.sh header file; these options also instruct the code generator to instrument the  generated  simulation  exe‐
+              cutable  with  additional information required by the run-time tracing facilities; at run-time, the simulator will read
+              tracing instructions from a .do file and produce a log file with tracing results; option -Tvcd will produce  a  regular
+              value-change-dump  (.vcd)  trace  file,  option -Tvcds a value-change-dump file with string support (.vcds), and option
+              -Tsvc an extended value-change-dump file (.svc); note that tracing support depends on  the  availability  of  debugging
+              facilities at run-time (option -G) which is implicitly enabled by any tracing option;
+
+       -Ti    specify name of input .do file (used for setting tracing options) explicitly (default: design.do);  the name '-' can be
+              used to specify reading from standard input;
+
+       -To    specify name of output svc/vcd file explicitly when tracing (default: design.svc or design.vcd,  depending  on  tracing
+              flag); the name '-' can be used to specify writing to standard output;
+
+       -C     when  used in conjunction with extended tracing (option -Tsvc), instructs the simulator to generate also tracing infor‐
+              mation for method calls and returns;
+
+       -ip    enable intellectual property (IP) mode; when generating a SIR binary or SpecC text file, only declarations  of  symbols
+              marked public will be included (the public interface of an IP is created); when generating C++ code, non-public symbols
+              will be output so that they will be invisible outside the file scope; when  compiling  or  linking,  the  compiler  and
+              linker are instructed to create a shared library instead of an executable file (creation of an IP simulation library);
+
+       -n     suppress  creation  of  new  log information when generating the output SIR file (default: update log information); see
+              also section ANNOTATIONS below;
+
+       -sl    suppress source line information (preprocessor directives) when generating SpecC or C++ source code  (default:  include
+              source line directives);
+
+       -sn    suppress all annotations when generating SpecC source code (default: include annotations);
+
+       -st tabulator stepping
+              set  the tabulator stepping for SpecC/C++ code generation; this setting is used for code indentation; a value of 0 will
+              disable the indentation of the generated code (default: 4);
+
+       -sT system tabulator stepping
+              set the system tabulator stepping (\t) for SpecC/C++ code generation; if set, tab characters will be used for  indenta‐
+              tion; if a value of 0 is specified, only spaces will be used for indentation (default: 8);
+
+       -sw line wrapping
+              set the column for line wrapping; in code generation, any line longer than this value is subject to line wrapping; if a
+              value of 0 is specified, no line wrapping will be performed (default: 70);
+
+       -pui | -psi
+              preserve the preprocessor #include directives found in the source files when generating SpecC or C++ code; without this
+              option,  all  include  files  are  inlined  in the generated output code; note that these options implement a heuristic
+              approach that may fail in special cases; option -pui enables this heuristic for user-defined include files (SpecC head‐
+              ers),  whereas option -psi enables it for system-defined include files (C headers); by default, both options are turned
+              off;
+
+       -pi    preserve import declarations when generating SpecC code; without this option, all imported files  are  inlined  in  the
+              generated  output code; note that this option implements a heuristic approach that may generate invalid code in extreme
+              cases; by default, this option is turned off;
+
+       -i input file
+              specify the name of the input file explicitly (default: design.suffix1); the name '-' can be used  to  specify  reading
+              from standard input;
+
+       -o output file
+              specify  the  name  of  the final output file explicitly (default: design.suffix2); the name '-' can be used to specify
+              writing to standard output;
+
+       -d     delete all intermediate files after they are used (i.e.  design.si, design.cc, design.h,  and  design.o);  by  default,
+              intermediate files are not deleted;
+
+       -D     do  not define any standard macros; by default, the macro __SPECC__ is defined automatically (it is set to 1); further‐
+              more, implementation dependent macros may be defined; this option suppresses the definition of all these macros;
+
+       -Dmacrodef
+              define the preprocessor macro macrodef to be passed to the preprocessor;
+
+       -U     do not undefine any macros; by default, few macros are undefined automatically (in order to allow C/C++ standard header
+              files to be used); this option is implementation dependent;
+
+       -Uundef
+              undefine the preprocessor macro undef which will be passed to the preprocessor as being undefined; the macro undef will
+              be undefined after the definition of all command-line macros; this allows to selectively  suppress  macros  from  being
+              defined in the preprocessing stage;
+
+       -I     clear  the  standard  include  path;  by  default, the standard include path consists of the directory $SPECC/inc; this
+              option suppresses the default include path;
+
+       -Idir  append dir to the include path (extend the list of directories to be searched  for  including  source  files);  include
+              directories are searched in the order of their specification; unless suppressed by option -I, the standard include path
+              is automatically appended to this list; by default, only the standard include directories are searched;
+
+       -L     clear the standard library path; by default, the standard library path  consists  of  the  directory  $SPECC/lib;  this
+              option suppresses the default library path;
+
+       -Ldir  append  dir  to the library path (extend the list of directories to be searched for linker libraries); the library path
+              is searched in the specified order; unless suppressed by option -L, the standard library path is automatically appended
+              to this list; by default, only the standard library path is searched;
+
+       -l     when linking, do not use any standard libraries; the default libraries are displayed when calling the compiler with the
+              -h option; the -l option suppresses linking against theses standard libraries;
+
+       -llib  pass lib as a library to the linker so that the executable is linked against lib; libraries are linked in the specified
+              order; unless suppressed by option -l, the standard libraries are automatically appended to this list; by default, only
+              standard libraries are used;
+
+       -P     reset the import path; clear the list of directories to be searched for importing files; by default, the current direc‐
+              tory  is  searched first, followed by the standard import directory $SPECC/import; this option suppresses this standard
+              import path;
+
+       -Pdir  append dir to the import path, extending the list of directories to be searched for importing files; import directories
+              are searched in the order of their specification; unless suppressed by option -P, the standard search path is automati‐
+              cally appended to this list; by default, only the standard import path is searched;
+
+       -xpp preprocessor_call
+              redefine the command to be used for calling the C preprocessor (default: "g++ -E -x c %p %i -o %o");  the  preprocessor
+              call must contain three markers %p, %i and %o, which indicate the options and file names used in the call; in the spec‐
+              ified string, the %p marker will be replaced with the list of specified preprocessor options; the  %i  and  %o  markers
+              will be replaced with the actual input and output filenames, respectively;
+
+       -xcc compiler_call
+              redefine  the command to be used for calling the C/C++ compiler (default: "g++ -c %c %i -o %o"); the compiler call must
+              contain three markers %c, %i and %o, which indicate the options and file names used  in  the  call;  in  the  specified
+              string,  the  %c  marker  will  be  replaced with the list of specified compiler options; the %i and %o markers will be
+              replaced with the actual input and output filenames, respectively;
+
+       -xld linker_call
+              redefine the command to be used for calling the linker (default: "g++ %i -o %o %l"); the linker call must contain three
+              markers  %l,  %i  and  %o,  which indicate the options and file names used in the call; in the specified string, the %l
+              marker will be replaced with the list of specified linker options; the %i and %o markers  will  be  replaced  with  the
+              actual input and output filenames, respectively;
+
+       -xp preprocessor_option
+              pass an option directly to the C/C++ preprocessor (default: none);
+
+       -xc compiler_option
+              pass an option directly to the C/C++ compiler (default: none);
+
+       -xl linker_option
+              pass an option directly to the linker (default: none);
+
+       -xcx   enable  handling  of compiler options annotated in the design as global annotation _SCE_COMPILER_OPTIONS; if found, the
+              annotated list of values will be passed as extra options (in addition to any options -xc) directly to  the  C/C++  com‐
+              piler (default: any annotation _SCE_COMPILER_OPTIONS is ignored)
+
+       -xlx   enable  handling  of linker options annotated in the design as global annotation _SCE_LINK_OPTIONS; if found, the anno‐
+              tated list of values will be passed as extra options (in addition to any options -xl) directly to the linker  (default:
+              any annotation _SCE_LINK_OPTIONS is ignored)
+
+ENVIRONMENT
+       SPECC  is  used to determine the installation directory of the SpecC environment where SpecC standard include files (directory
+              $SPECC/inc), SpecC standard import files (directory $SPECC/import), and SpecC system libraries  (directory  $SPECC/lib)
+              are located.
+
+       SPECC_LICENSE_FILE
+              determines  the  license  file  (path and file name) to be used by the SpecC environment; if undefined, the environment
+              variable SPECC is used as the path to the license file called "license.sir"; if neither  SPECC_LICENSE_FILE  nor  SPECC
+              exist, the file "license.sir" is searched in the current directory.
+
+       SPECC_THREAD_STACK_SIZE
+              determines  the  stack size allocated for each thread during simulation; the number must be an integer of at least 1024
+              (1KB); the default value is installation dependent (4MB); SPECC_THREAD_STACK_SIZE is evaluated at  simulator  run  time
+              (so  that the same executable can be run with different stack sizes); the stack size should be carefully chosen for the
+              application; a size too small will result in undefined behavior; a size too large will result in running out of  memory
+              (e.g. fatal error "Cannot create new thread")
+
+       SPECC_PAR_SIM_CPUS
+              determines  the  number of CPU cores to be used by the parallel and out-of-order simulators; the number must be a posi‐
+              tive integer; the default value is installation dependent (4); SPECC_PAR_SIM_CPUS is evaluated at  simulator  run  time
+              (so that the same executable can be run with different number of parallel resources).
+
+       SPECC_OOO_PRED_STEPS
+              determines the number of steps predicted by the compiler when performing thread conflict analysis for out-of-order par‐
+              allel simulation; the number must be a positive integer; the default value is installation dependent (1000); the  value
+              1  means  no future prediction (1 step look-ahead is always needed); generally, higher numbers result in higher simula‐
+              tion speed but also slightly increased compile time.
+
+ANNOTATIONS
+       The following SpecC annotations are recognized by the compiler:
+
+       _SCE_LOG
+              contains the log information of the SIR file; this global annotation is created and  maintained  automatically  by  the
+              SpecC  compiler  and  the  SpecC  tool  set and can be used to determine the origin and the operations performed on the
+              design model; _SCE_LOG is a composite annotation consisting of a list of log entries, ordered by time of creation; each
+              log entry consists of a time stamp, command line, source file, version info, and an optional comment;
+
+       _SCE_COMPILER_OPTIONS
+              defines  a list of compiler options which will be passed directly to the C/C++ compiler if option -xcx is given (other‐
+              wise, it is ignored); _SCE_COMPILER_OPTIONS is a composite annotation consisting of a list of strings;
+
+       _SCE_LINK_OPTIONS
+              defines a list of linker options which will be passed directly to the linker if option -xlx is given (otherwise, it  is
+              ignored); _SCE_LINK_OPTIONS is a composite annotation consisting of a list of strings;
+
+       _SCC_RESERVED_SIZE
+              for  external  behaviors  and  channels (IP components), this indicates the size reserved in the C++ class for internal
+              use; the annotation type is unsigned int; if found at class definitions, this annotation is checked  automatically  for
+              reasonable values; for IP declarations, the annotation can be created automatically with the -ip option;
+
+       _SCC_PUBLIC
+              for global symbols, this annotation indicates whether the symbol is public and will be visible in a shared library; the
+              annotation type is bool; this annotation only is recognized with the -ip option;
+
+VERSION
+       The SpecC compiler scc is version 2.2.1.
+
+AUTHOR
+       Rainer Doemer <doemer@uci.edu>
+
+COPYRIGHT
+       (c) 1997-2018 CECS, University of California, Irvine
+
+SEE ALSO
+       gcc(1),  g++(1),  sir_access(l),  sir_delete(l),  sir_depend(l),  sir_gen(l),  sir_import(l),   sir_isolate(l),   sir_list(l),
+       sir_note(l), sir_rename(l), sir_stats(l), sir_strip(l), sir_tree(l), sir_wrap(l)
+
+BUGS, LIMITATIONS
+       Variables of enumerator type cannot be initialized at the time of their declaration. The SpecC compiler issues a (false) error
+       message in this case.  As a simple work-around, however, enumerator variables can be initialized by use of standard assignment
+       statements at the beginning of their lifetimes.
+
+
+
+                                                            July 25, 2014                                                      scc(l)

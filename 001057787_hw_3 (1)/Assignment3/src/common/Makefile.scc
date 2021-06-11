@@ -1,0 +1,41 @@
+#
+#	makefile for common files
+#
+
+include ../Makefile.macros
+
+
+
+
+
+all:    std_includes.sir reset.sir basic_op.sir F_gamma.sir array_op.sir \
+	basic_func.sir lsp_az.sir residu.sir syn_filt.sir weight_ai.sir	\
+	copy.sir gains_tb.sir channels.sir pack.$(OBJSFX)
+
+
+
+# Explicit Rules
+
+basic_op.sir: typedef.sh cnst.sh std_includes.sir
+
+F_gamma.sir: typedef.sh cnst.sh 
+
+array_op.sir: typedef.sh 
+
+basic_func.sir: typedef.sh basic_op.sir
+
+lsp_az.sir: typedef.sh basic_op.sir
+
+residu.sir: typedef.sh cnst.sh basic_op.sir
+
+syn_filt.sir: typedef.sh cnst.sh basic_op.sir
+
+weight_ai.sir: typedef.sh cnst.sh basic_op.sir
+
+
+
+clean:
+	$(RM) *.sir *.si *.cc
+	$(RM) *.h
+	$(RM) *.$(OBJSFX)
+	$(RM) core *.bak *.BAK *~

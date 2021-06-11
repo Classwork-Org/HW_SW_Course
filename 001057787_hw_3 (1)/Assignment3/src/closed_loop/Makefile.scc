@@ -1,0 +1,47 @@
+#
+#	makefile for adaptive codebook search
+#
+
+
+include ../Makefile.macros
+
+
+
+
+all:    closed_loop.sir
+
+
+# Explicit Rules
+
+closed_loop.sir: $(COMMON)/typedef.sh $(COMMON)/cnst.sh $(COMMON)/reset.sir par_weight.sir imp_resp.sir find_targetvec.sir \
+                   pitch_fr6.sir enc_lag6.sir pred_lt_6.sir convolve.sir g_pitch.sir q_gain_pitch.sir
+
+par_weight.sir: $(COMMON)/typedef.sh $(COMMON)/cnst.sh $(COMMON)/weight_ai.sir
+
+imp_resp.sir: $(COMMON)/typedef.sh $(COMMON)/cnst.sh $(COMMON)/array_op.sir $(COMMON)/syn_filt.sir $(COMMON)/reset.sir
+
+find_targetvec.sir: $(COMMON)/typedef.sh $(COMMON)/cnst.sh $(COMMON)/array_op.sir $(COMMON)/residu.sir \
+                    $(COMMON)/syn_filt.sir compute_CN_excitation_gain.sir
+
+compute_CN_excitation_gain.sir: $(COMMON)/typedef.sh $(COMMON)/cnst.sh $(COMMON)/basic_op.sir
+
+pitch_fr6.sir: $(COMMON)/typedef.sh $(COMMON)/cnst.sh $(COMMON)/basic_op.sir \
+               $(COMMON)/basic_func.sir
+
+enc_lag6.sir: $(COMMON)/typedef.sh $(COMMON)/cnst.sh $(COMMON)/basic_op.sir
+
+pred_lt_6.sir: $(COMMON)/typedef.sh $(COMMON)/cnst.sh $(COMMON)/basic_op.sir
+
+convolve.sir: $(COMMON)/typedef.sh $(COMMON)/cnst.sh $(COMMON)/basic_func.sir
+
+g_pitch.sir: $(COMMON)/typedef.sh $(COMMON)/cnst.sh $(COMMON)/basic_op.sir
+
+q_gain_pitch.sir: $(COMMON)/typedef.sh $(COMMON)/cnst.sh $(COMMON)/basic_op.sir
+
+
+
+clean:
+	$(RM) *.sir *.si *.cc
+	$(RM) *.h
+	$(RM) *.$(OBJSFX)
+	$(RM) core *.bak *.BAK *~

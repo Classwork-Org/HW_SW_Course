@@ -1,0 +1,32 @@
+#
+#	makefile for pre and post processing
+#
+
+
+include ../Makefile.macros
+
+SCCOPTS += -P../lp_analysis -P../codebook -P../closed_loop -P../processing
+
+
+
+
+all:    dec_12k2.sir
+
+
+# Explicit Rules
+
+dec_12k2.sir: rx_dtx.sir decode_lsp.sir decoder_subframe.sir
+
+decode_lsp.sir: d_plsf_5.sir
+
+decoder_subframe.sir: dec_lag_code.sir d_gain_pitch.sir d_gain_code.sir \
+                       add_pitch_contr.sir synth_speech.sir
+
+dec_lag_code.sir: dec_lag6.sir dec_10i40_35bits.sir
+
+
+clean:
+	$(RM) *.sir *.si *.cc
+	$(RM) *.h
+	$(RM) *.$(OBJSFX)
+	$(RM) core *.bak *.BAK *~

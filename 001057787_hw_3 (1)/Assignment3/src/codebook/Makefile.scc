@@ -1,0 +1,53 @@
+#
+#	makefile for innovative codebook search
+#
+
+
+include ../Makefile.macros
+
+
+
+
+all:    codebook_cn.sir
+
+
+
+# Explicit Rules
+
+codebook_cn.sir: $(COMMON)/typedef.sh $(COMMON)/cnst.sh codebook.sir build_cn_code.sir
+
+
+codebook.sir: $(COMMON)/typedef.sh $(COMMON)/cnst.sh pitch_contr.sir \
+              prefilter.sir code_10i40_35bits.sir g_code.sir
+
+pitch_contr.sir: $(COMMON)/typedef.sh $(COMMON)/cnst.sh $(COMMON)/basic_op.sir
+
+prefilter.sir: $(COMMON)/typedef.sh $(COMMON)/cnst.sh $(COMMON)/basic_op.sir
+
+g_code.sir: $(COMMON)/typedef.sh $(COMMON)/cnst.sh $(COMMON)/basic_op.sir
+
+code_10i40_35bits.sir: $(COMMON)/typedef.sh q_p.sir cor_h_x.sir set_sign.sir \
+                       cor_h.sir search_10i40.sir build_code.sir
+
+q_p.sir: $(COMMON)/typedef.sh $(COMMON)/cnst.sh $(COMMON)/basic_op.sir
+
+cor_h_x.sir: $(COMMON)/typedef.sh $(COMMON)/cnst.sh $(COMMON)/basic_op.sir
+
+set_sign.sir: $(COMMON)/typedef.sh $(COMMON)/cnst.sh $(COMMON)/basic_op.sir $(COMMON)/basic_func.sir
+
+cor_h.sir: $(COMMON)/typedef.sh $(COMMON)/cnst.sh $(COMMON)/basic_op.sir $(COMMON)/basic_func.sir
+
+search_10i40.sir: $(COMMON)/typedef.sh $(COMMON)/cnst.sh $(COMMON)/basic_op.sir
+
+build_code.sir: $(COMMON)/typedef.sh $(COMMON)/cnst.sh $(COMMON)/basic_op.sir
+
+
+build_cn_code.sir: $(COMMON)/typedef.sh $(COMMON)/cnst.sh $(COMMON)/basic_op.sir
+
+
+
+clean:
+	$(RM) *.sir *.si *.h *.cc
+	$(RM) *.h
+	$(RM) *.$(OBJSFX)
+	$(RM) core *.bak *.BAK *~

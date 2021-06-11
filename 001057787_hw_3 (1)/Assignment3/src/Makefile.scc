@@ -1,0 +1,128 @@
+#
+#	makefile for GSM Enhanced Full Rate Speech Codec
+#
+
+
+include Makefile.macros
+
+SCC  = scc
+MAKE = make -f Makefile.scc SCC=$(SCC) 
+
+
+COMMON = $(COMMONDIR)
+
+
+SCCOPTS += -d -P./lp_analysis -P./open_loop -P./closed_loop \
+           -P./codebook -P./update -P./processing -P./decoder
+
+#SCCOPTS = $(SCCVERB) $(SCCWARN) $(SCCFLAGS)
+
+
+
+# targets
+
+all:	subdirs testbench libEFR_Coder.so
+
+
+subdirs: 
+	cd common; $(MAKE);
+	cd lp_analysis; $(MAKE);
+	cd open_loop; $(MAKE);
+	cd closed_loop; $(MAKE);
+	cd codebook; $(MAKE);
+	cd update; $(MAKE);
+	cd processing; $(MAKE);
+	cd decoder; $(MAKE);
+
+
+
+test:	testbench
+	if echo "$(DEFINES)" | grep -q ENABLE_DECODER ; then	\
+	  ./tst_vocoder ;					\
+	else							\
+	  ./tst_coder ;						\
+	fi
+
+stest:	testbench
+	./tst_silent
+
+
+tools:	bit2cod bitcat
+
+
+tar tarball: 
+	$(TAR) cvzfT $(PACKAGE) $(FILES)
+
+
+
+
+
+# Explicit Rules
+
+testbench: testbench.sir
+	$(SCC) testbench -sir2out $(SCCOPTS) -xl $(COMMON)/pack.$(OBJSFX) $(SCCLIBS)
+
+testbench.sir: $(COMMON)/typedef.sh $(COMMON)/cnst.sh \
+               vocoder.sir arg_handler.sir
+
+vocoder.sir: $(COMMON)/typedef.sh $(COMMON)/cnst.sh \
+		coder.sir decoder.sir stimulus.sir monitor.sir 
+
+stimulus.sir: $(COMMON)/typedef.sh $(COMMON)/cnst.sh $(COMMON)/std_includes.sir
+
+monitor.sir: $(COMMON)/typedef.sh $(COMMON)/cnst.sh $(COMMON)/std_includes.sir
+
+arg_handler.sir: $(COMMON)/typedef.sh $(COMMON)/std_includes.sir
+
+decoder.sir: $(COMMON)/typedef.sh $(COMMON)/cnst.sh $(COMMON)/reset.sir \
+             decoder/dec_12k2.sir processing/homing_test.sir processing/bits2prm.sir
+
+coder.sir: $(COMMON)/typedef.sh $(COMMON)/cnst.sh $(COMMON)/reset.sir cod_12k2.sir \
+	   processing/pre_process.sir processing/post_process.sir \
+	   EFR_Coder_public.sc EFR_Coder_public.sh
+
+cod_12k2.sir: $(COMMON)/typedef.sh $(COMMON)/cnst.sh $(COMMON)/reset.sir lp_analysis/lp_analysis.sir \
+              open_loop/open_loop.sir subframes.sir update/shift_signals.sir
+
+subframes.sir: $(COMMON)/typedef.sh $(COMMON)/cnst.sh $(COMMON)/array_op.sir $(COMMON)/reset.sir \
+                 closed_loop/closed_loop.sir codebook/codebook_cn.sir update/update.sir
+
+
+bit2cod: bit2cod.sir
+	$(SCC) bit2cod $(SCCOPTS)
+
+bitcat: bitcat.sir
+	$(SCC) bitcat $(SCCOPTS)
+
+
+
+libEFR_Coder.so: coder.sir
+	$(SCC) coder -sir2out -ip -o libEFR_Coder.so $(SCCOPTS)
+
+
+
+
+
+
+
+
+
+clean:
+	cd common; $(MAKE) clean;
+	cd lp_analysis; $(MAKE) clean;
+	cd open_loop; $(MAKE) clean;
+	cd closed_loop; $(MAKE) clean;
+	cd codebook; $(MAKE) clean;
+	cd update; $(MAKE) clean;
+	cd processing; $(MAKE) clean;
+	cd decoder; $(MAKE) clean;
+	$(RM) *.bak *.BAK *~
+	$(RM) *.sir *.si *.cc
+	$(RM) *.h
+	$(RM) *.$(OBJSFX)
+	$(RM) libEFR_Coder.so
+	$(RM) testbench$(EXESFX)
+	$(RM) bit2cod
+	$(RM) bitcat
+	$(RM) core
+	$(RM) dtx.bit nodtx.bit speech.out

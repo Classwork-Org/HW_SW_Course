@@ -1,0 +1,5 @@
+#!/bin/csh
+
+(./testbench speechfiles/spch_unx.inp nodtx.bit nodtx >&/dev/null && cmp nodtx.bit speechfiles/nodtx_good.bit && echo ==== nodtx ok ====) &
+
+(./testbench speechfiles/spch_unx.inp dtx.bit   dtx   >&/dev/null && cmp dtx.bit speechfiles/dtx_good.bit     && echo ==== dtx ok ====) &

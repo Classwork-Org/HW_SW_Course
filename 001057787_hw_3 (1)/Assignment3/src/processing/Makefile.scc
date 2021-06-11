@@ -1,0 +1,36 @@
+#
+#	makefile for pre and post processing
+#
+
+
+include ../Makefile.macros
+
+
+
+
+
+all:    pre_process.sir post_process.sir post_filter.sir bits2prm.sir
+
+
+# Explicit Rules
+
+pre_process.sir: $(COMMON)/typedef.sh $(COMMON)/cnst.sh $(COMMON)/reset.sir homing_test.sir filter_and_scale.sir
+
+homing_test.sir: $(COMMON)/typedef.sh $(COMMON)/cnst.sh 
+
+filter_and_scale.sir: $(COMMON)/typedef.sh $(COMMON)/cnst.sh $(COMMON)/basic_op.sir $(COMMON)/reset.sir
+
+post_process.sir: $(COMMON)/typedef.sh $(COMMON)/cnst.sh $(COMMON)/reset.sir prm2bits.sir cn_encoding.sir sid_codeword_encode.sir
+
+prm2bits.sir: $(COMMON)/typedef.sh $(COMMON)/cnst.sh $(COMMON)/basic_op.sir
+
+cn_encoding.sir: $(COMMON)/typedef.sh $(COMMON)/cnst.sh $(COMMON)/reset.sir
+
+sid_codeword_encode.sir: $(COMMON)/typedef.sh $(COMMON)/cnst.sh 
+
+
+clean:
+	$(RM) *.sir *.si *.cc
+	$(RM) *.h
+	$(RM) *.$(OBJSFX)
+	$(RM) core *.bak *.BAK *~

@@ -1,0 +1,48 @@
+#
+#	makefile for linear prediction analysis
+#
+
+include ../Makefile.macros
+
+
+
+all:    lp_analysis.sir
+
+
+# Explicit Rules
+
+lp_analysis.sir: $(COMMON)/typedef.sh $(COMMON)/cnst.sh $(COMMON)/array_op.sir $(COMMON)/reset.sir find_az.sir \
+                 az_lsp.sir vad_lp.sir int_lpc.sir q_plsf_and_intlpc.sir no_speech_upd.sir lp_analysis.tab
+
+find_az.sir: $(COMMON)/typedef.sh $(COMMON)/cnst.sh autocorr.sir lag_wind.sir levinson.sir
+
+autocorr.sir: $(COMMON)/typedef.sh $(COMMON)/cnst.sh $(COMMON)/basic_op.sir
+
+lag_wind.sir: $(COMMON)/typedef.sh $(COMMON)/cnst.sh $(COMMON)/basic_op.sir
+
+levinson.sir: $(COMMON)/typedef.sh $(COMMON)/cnst.sh $(COMMON)/basic_op.sir
+
+az_lsp.sir: $(COMMON)/typedef.sh $(COMMON)/cnst.sh $(COMMON)/basic_op.sir
+
+vad_lp.sir: $(COMMON)/typedef.sh $(COMMON)/cnst.sh $(COMMON)/reset.sir vad_comp.sir tx_dtx.sir nodtx_setflags.sir
+
+vad_comp.sir: $(COMMON)/typedef.sh $(COMMON)/cnst.sh $(COMMON)/basic_op.sir $(COMMON)/reset.sir
+
+tx_dtx.sir: $(COMMON)/typedef.sh $(COMMON)/cnst.sh $(COMMON)/basic_op.sir $(COMMON)/reset.sir
+
+nodtx_setflags.sir: $(COMMON)/typedef.sh $(COMMON)/cnst.sh
+
+q_plsf_and_intlpc.sir: $(COMMON)/typedef.sh $(COMMON)/cnst.sh $(COMMON)/reset.sir int_lpc.sir q_plsf_5.sir
+
+int_lpc.sir: $(COMMON)/typedef.sh $(COMMON)/cnst.sh $(COMMON)/basic_op.sir $(COMMON)/lsp_az.sir
+
+q_plsf_5.sir: $(COMMON)/typedef.sh $(COMMON)/cnst.sh $(COMMON)/basic_op.sir $(COMMON)/reset.sir q_plsf_5.tab
+
+no_speech_upd.sir: $(COMMON)/typedef.sh $(COMMON)/cnst.sh 
+
+
+clean:
+	$(RM) *.sir *.si *.cc
+	$(RM) *.h
+	$(RM) *.$(OBJSFX)
+	$(RM) core *.bak *.BAK *~

@@ -1,0 +1,18 @@
+GDB shows only one thread, ps shows no additional child processes, so everything is under one thread
+Specc scheduals behaviors, and it has the concenpt of parking the behavior if it's waiting for an event 
+
+Case 1:
+Reciever called before Sender.
+Receive gets blocked instantly because the valid event hasn't been raised
+Sender gets a chance to run, doesn't yield control back to recieve because it waits on nothing 
+Sender keeps raising Valids and overrwrites data
+After last sender character sender terminates and Reciever gets a chance to run 
+Reciever recieves last event for last characer and terminates (lifetime of event is until it releases a behavior) 
+
+Case 2: 
+Sender called before Recieved.
+Sender Calls and keeps running until last character and notify are sent out and sender terminates
+Reciever gets called finally and recieves last notify and last character, prints then terminates 
+
+In both cases Sender causes Reciever to starve
+This is strange behavior

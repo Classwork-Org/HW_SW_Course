@@ -1,0 +1,33 @@
+#
+#	makefile for open loop pitch analysis
+#
+
+include ../Makefile.macros
+
+
+
+
+all:    open_loop.sir
+
+
+
+# Explicit Rules
+
+open_loop.sir: $(COMMON)/typedef.sh $(COMMON)/cnst.sh $(COMMON)/array_op.sir $(COMMON)/weight_ai.sir \
+               $(COMMON)/residu.sir $(COMMON)/syn_filt.sir $(COMMON)/reset.sir ol_lag_est.sir
+
+ol_lag_est.sir: $(COMMON)/typedef.sh $(COMMON)/cnst.sh $(COMMON)/reset.sir pitch_ol.sir period_upd.sir get_minmax.sir
+
+pitch_ol.sir: $(COMMON)/typedef.sh $(COMMON)/cnst.sh $(COMMON)/basic_op.sir $(COMMON)/basic_func.sir
+
+period_upd.sir: $(COMMON)/typedef.sh $(COMMON)/cnst.sh $(COMMON)/basic_op.sir $(COMMON)/reset.sir
+
+get_minmax.sir: $(COMMON)/typedef.sh $(COMMON)/cnst.sh $(COMMON)/basic_op.sir
+
+
+
+clean:
+	$(RM) *.sir *.si *.cc
+	$(RM) *.h
+	$(RM) *.$(OBJSFX)
+	$(RM) core *.bak *.BAK *~

@@ -1,0 +1,75 @@
+# paths
+
+EFRDIR = .
+
+# path for common files
+COMMONDIR = common
+COMMON = ../$(COMMONDIR)
+
+
+# programs
+
+#CC	= gcc -m32
+CC	= gcc
+SCC 	= scrc
+TAR 	= gtar
+RM 	= rm -f
+CP 	= cp
+MV 	= mv
+STRIP 	= strip
+
+AR      = ar rc
+RAN     = ranlib
+
+
+# suffixes
+
+OBJSFX	= o
+LIBSFX	= a
+SOSFX	= so
+EXESFX	=
+
+
+# parameters
+
+DEFINES = 
+#DEFINES += -DEXTERNAL_CONTROL	# extern control support, no exit()
+#DEFINES += -DENABLE_DECODER	# include decoder for full vocoder
+#DEFINES += -DDEBUGOUTPUT	# report division errors and homing frames
+#DEFINES += -DPIPED_CODER	# pipelined encoder version
+#DEFINES += -DUSE_BIT_PORTS	# use bit-type ports in structural hierarchy
+#DEFINES += -DUSE_BIT_OPS	# use also bit operations
+#DEFINES += -DTYPED_CHANNELS    # or, use typed channels for communication
+
+SCCVERB = -vv
+SCCWARN = -ww
+SCCFLAGS = -g -I$(COMMON) -P$(COMMON) $(DEFINES) 
+
+CCFLAGS = -xc '-fpermissive'	# some Linux headers choke otherwise
+
+SCCOPTS = $(SCCVERB) $(SCCWARN) $(SCCFLAGS) $(CCFLAGS)
+
+SCCLIBS	=
+
+
+# rules
+
+.SUFFIXES:
+.SUFFIXES: .sc .sir .c .$(OBJSFX)
+
+.c.$(OBJSFX):
+	$(CC) -c $<
+
+.sc.sir:
+	$(SCC) $* -sc2sir $(SCCOPTS)
+
+.sc.$(OBJSFX):
+	$(SCC) $* -sc2o $(SCCOPTS)
+
+
+# tarball stuff
+
+PACKAGE = vocoder.tar.gz
+
+FILES 	= FILES
+

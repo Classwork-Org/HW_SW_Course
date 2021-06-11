@@ -1,0 +1,37 @@
+[Compiler]
+Defines=
+Undefines=
+IncludePath=$SPECC/inc
+LibraryPath=$SPECC/lib
+ImportPath=.:$SPECC/import
+Libraries=-lbit -lbit4 -lsim -llonglong -lqthread
+; PreprocessorOpts=
+; CompilerOpts=
+; LinkerOpts=-Xlinker -R -Xlinker $SPECC/lib
+Options=-xcx -xlx
+Verbosity=1
+Warning=2
+
+[Database]
+PEPath=/ECEnet/Apps1/sce/latest/share/sce/db/processors/processors.sir
+CEPath=/ECEnet/Apps1/sce/latest/share/sce/db/communication/communication.sir
+BusPath=/ECEnet/Apps1/sce/latest/share/sce/db/busses/busses.sir
+RTLPath=/ECEnet/Apps1/sce/latest/share/scrtl/db/rtl.sir
+PEUserDir=.sce/processors
+CEUserDir=.sce/communication
+BusUserDir=.sce/busses
+RTLUserDir=.sce/rtl
+
+[Plugins]
+; ArchPath=/opt/sce/plugins/synthesis/arch
+; SchedPath=/opt/sce/plugins/synthesis/sched
+; NetPath=/opt/sce/plugins/synthesis/net
+; CommPath=/opt/sce/plugins/synthesis/comm
+; RTLPath=/opt/sce/plugins/synthesis/rtl
+
+[General]
+GeometryHeight=572
+GeometryWidth=788
+GeometryX=0
+GeometryY=0
+

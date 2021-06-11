@@ -1,0 +1,15 @@
+#!/bin/sh
+
+set -e
+
+./testbench speechfiles/spch_unx.inp speechfiles/spch_unx.dec speech.out nodtx.bit nodtx
+dos2unix nodtx.bit
+cmp nodtx.bit speechfiles/nodtx_good.bit
+#cmp speech.out speechfiles/spch_unx.out
+echo ==== nodtx ok ====
+
+./testbench speechfiles/spch_unx.inp speechfiles/spch_unx.dec speech.out dtx.bit dtx
+dos2unix nodtx.bit
+cmp dtx.bit   speechfiles/dtx_good.bit
+#cmp speech.out speechfiles/spch_unx.out
+echo ==== dtx ok ====

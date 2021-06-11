@@ -1,0 +1,7 @@
+#!/bin/sh
+
+./testbench ../speechfiles/spch_unx.inp nodtx.bit nodtx
+cmp nodtx.bit ../speechfiles/nodtx_good.bit && echo ==== nodtx ok ====
+
+./testbench ../speechfiles/spch_unx.inp dtx.bit dtx
+cmp dtx.bit ../speechfiles/dtx_good.bit && echo ==== dtx ok ====

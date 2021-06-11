@@ -1,0 +1,38 @@
+[*]
+[*] GTKWave Analyzer v3.3.61 (w)1999-2014 BSI
+[*] Fri Oct 18 01:54:23 2019
+[*]
+[dumpfile] "/Users/Grad/asultan/Documents/hwsw/Assignment2/trace/pd_stdCh_queue.vcd"
+[dumpfile_mtime] "Fri Oct 18 01:41:28 2019"
+[dumpfile_size] 2754
+[savefile] "/Users/Grad/asultan/Documents/hwsw/Assignment2/trace/signal_view.gtkw"
+[timestart] 0
+[size] 2497 1416
+[pos] -1 -1
+*-12.679689 9770 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+[sst_width] 240
+[signals_width] 315
+[sst_expanded] 1
+[sst_vpaned_height] 437
+@28
+Main
+@200
+-
+-
+@28
+\Main.s
+@820
+\Main.s.txChar_signal[7:0]
+@29
+\Main.c.s
+@200
+-
+-
+@28
+\Main.r
+@820
+\Main.r.rxChar_signal[7:0]
+@28
+\Main.c.r
+[pattern_trace] 1
+[pattern_trace] 0

@@ -1,0 +1,275 @@
+$date
+	Thu Oct 17 23:39:40 2019
+$end
+$version
+	UCI SpecC VCD Writer v0.001
+$end
+$timescale
+	1ps
+$end
+
+$var real 0 ! anonymous $end
+$var event 1 " Main.c.r $end
+$var event 1 # Main.c.s $end
+$var wire 8 $ Main.r.rxChar_signal $end
+$var wire 32 % Main.s.idx $end
+$var wire 32 & Main.s.time $end
+$var wire 8 ' Main.s.txChar_signal $end
+$var real 1 ( Main.c $end
+$var real 1 ) Main.r $end
+$var real 1 * Main.s $end
+$var wire 32 + Main.temp_time $end
+$var real 1 , Main $end
+$var real 1 - _gl_string0 $end
+$var real 1 . _gl_string1 $end
+$var real 1 / _gl_string2 $end
+$var real 1 0 _gl_string3 $end
+$var real 1 1 _gl_string4 $end
+$enddefinitions $end
+
+#0
+$dumpvars
+0"
+0#
+b0 $
+b0 %
+b0 &
+b0 '
+b0 +
+$end
+srunning ,
+sparent ,
+sparent ,
+srunning )
+swaiting )
+srunning *
+ssleeping *
+#1
+0"
+b0 &
+b0 '
+b0 %
+srunning )
+b1001000 '
+b0 &
+b0 %
+ssleeping )
+#2
+b0 $
+b1001000 $
+#5000
+srunning *
+ssleeping *
+#5001
+b0 &
+b1001000 '
+b0 %
+b1100101 '
+b101 &
+b1 %
+#10000
+srunning *
+srunning )
+swaiting *
+ssleeping )
+#10001
+b1001000 $
+0#
+b101 &
+b1100101 '
+b1 %
+srunning *
+b1101100 '
+b1010 &
+b10 %
+b1100101 $
+ssleeping *
+#15000
+srunning *
+swaiting *
+#15001
+b1010 &
+b1101100 '
+b10 %
+b1101100 '
+b1111 &
+b11 %
+#20000
+srunning )
+ssleeping )
+#20001
+b1100101 $
+0#
+srunning *
+b1101100 $
+ssleeping *
+#25000
+srunning *
+swaiting *
+#25001
+b1111 &
+b1101100 '
+b11 %
+b1101111 '
+b11001 &
+b100 %
+#30000
+srunning )
+ssleeping )
+#30001
+b1101100 $
+0#
+srunning *
+b1101100 $
+ssleeping *
+#35000
+srunning *
+swaiting *
+#35001
+b11001 &
+b1101111 '
+b100 %
+b100000 '
+b100011 &
+b101 %
+#40000
+srunning )
+ssleeping )
+#40001
+b1101100 $
+0#
+srunning *
+b1101111 $
+ssleeping *
+#45000
+srunning *
+swaiting *
+#45001
+b100011 &
+b100000 '
+b101 %
+b1010111 '
+b101101 &
+b110 %
+#50000
+srunning )
+ssleeping )
+#50001
+b1101111 $
+0#
+srunning *
+b100000 $
+ssleeping *
+#55000
+srunning *
+swaiting *
+#55001
+b101101 &
+b1010111 '
+b110 %
+b1101111 '
+b110111 &
+b111 %
+#60000
+srunning )
+ssleeping )
+#60001
+b100000 $
+0#
+srunning *
+b1010111 $
+ssleeping *
+#65000
+srunning *
+swaiting *
+#65001
+b110111 &
+b1101111 '
+b111 %
+b1110010 '
+b1000001 &
+b1000 %
+#70000
+srunning )
+ssleeping )
+#70001
+b1010111 $
+0#
+srunning *
+b1101111 $
+ssleeping *
+#75000
+srunning *
+swaiting *
+#75001
+b1000001 &
+b1110010 '
+b1000 %
+b1101100 '
+b1001011 &
+b1001 %
+#80000
+srunning )
+ssleeping )
+#80001
+b1101111 $
+0#
+srunning *
+b1110010 $
+ssleeping *
+#85000
+srunning *
+swaiting *
+#85001
+b1001011 &
+b1101100 '
+b1001 %
+b1100100 '
+b1010101 &
+b1010 %
+#90000
+srunning )
+ssleeping )
+#90001
+b1110010 $
+0#
+srunning *
+b1101100 $
+ssleeping *
+#95000
+srunning *
+swaiting *
+#95001
+b1010101 &
+b1100100 '
+b1010 %
+b0 '
+b1011111 &
+b1011 %
+#100000
+srunning )
+ssleeping )
+#100001
+b1101100 $
+0#
+srunning *
+b1100100 $
+ssleeping *
+#105000
+srunning *
+sinactive *
+#110000
+srunning )
+ssleeping )
+#110001
+b1100100 $
+b0 $
+#120000
+srunning )
+sinactive )
+srunning ,
+sinactive ,
+#121000
+$comment
+	Finished dumping at Thu Oct 17 23:39:40 2019
+$end
